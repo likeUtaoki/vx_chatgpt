@@ -35,6 +35,7 @@ class WXAPI:
     def generate_qrcode_url(self,scene):
         try:
             qrcode_data = self.generate_qrcode(scene)
+            print(qrcode_data)
             res = self.clinet.qrcode.get_url(qrcode_data.get("ticket"))
             logger.info("获取临时二维码成功:{}".format(res))
             return res
@@ -87,7 +88,7 @@ class WXAPI:
             "url":"http://weixin.qq.com/q/kZgfwMTm72WWPkovabbI"
         }
         """
-        token = await self.access_token()
+        token = await self.async_access_token()
         url = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token={}".format(token)
         data = {
             "expire_seconds": 60,

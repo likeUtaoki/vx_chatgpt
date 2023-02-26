@@ -44,7 +44,7 @@ async def signature(
 async def qrcode():
     #设置场景id
     login_id =str(uuid.uuid4()).replace("-","")
-    #qrcode_url = await WXAPI.get_qrcode_url(login_id) #异步获取方式
+    #qrcode_url = await WXAPI().async_generate_qrcode(login_id) #异步获取方式
     qrcode_url =  WXAPI().generate_qrcode_url(login_id)
     return result_success(data={"qrcode_url":qrcode_url,"scene_value":login_id})
 
