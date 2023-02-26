@@ -12,3 +12,4 @@ uvicorn==0.20.0
 wechatpy==1.8.18
 crypto == 1.4.1
 cryptography==39.0.1
+Jinja2== 3.1.2
