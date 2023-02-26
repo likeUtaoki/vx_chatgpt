@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link href="{{url_for('static',path='/css/login.css')}}" rel="stylesheet">
+</head>
+
+<body>
+    <div class="login-wrap">
+        <div class="login-root">
+            <div class="login-main">
+                <img class="login-one-ball"
+                    src="https://assets.codehub.cn/micro-frontend/login/fca1d5960ccf0dfc8e32719d8a1d80d2.png" />
+                <img class="login-two-ball"
+                    src="https://assets.codehub.cn/micro-frontend/login/4bcf705dad662b33a4fc24aaa67f6234.png" />
+                <div class="login-container">
+                    <div class="login_title">扫描登录</div>
+                    <div>
+                        <div onclick="fetchQrcode()" id="qrcode_expired" style="display:none;" class="login_expired">
+                            <span>二维码已过期</span><span>点击刷新</span>
+                        </div>
+                        <img id="qrcode" alt="qrCode"
+                            src="https://didiplus.oss-cn-hangzhou.aliyuncs.com/1470137311494929.gif" />
+                    </div>
+                    <div class="login_desc">用微信扫描上方二维码登录</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="{{url_for('static',path='/js/layui/layui.js')}}"></script>
+<script>
+    layui.use(['layer'], function () {
+        var $ = layui.$;
+
+        // 方便清除轮询
+        let counter = 0
+        var timer = 0;
+        var flag = "";
+
+        function fetchQrcode() {
+            $.get("/wxmp/weChatQrCode", function (res) {
+                counter = 0
+                $("#qrcode").attr("src", res.data.qrcode_url);
+                flag = res.data.scene_value;
+
+                // 轮询登录状态
+                timer = setInterval(() => {
+                    if (counter >= 30) {
+                        var display_vlaue = $("#qrcode_expired").css("display")
+                        if (display_vlaue === "none") {
+                            $("#qrcode_expired").css("display", "flex")
+                        } else {
+                            $("#qrcode_expired").css("display", "")
+                            $("#qrcode_expired").css("z-index", "0")
+                        }
+                        clearInterval(timer);
+                        return
+                    }
+                    // 请求参数是二维码中的场景值
+                    $.get("/wxmp/?wechat_flag=" + flag, function (res) {
+                        counter += 1
+                        if (res.code == 200) {
+                            sessionStorage.setItem("token", res.data.token)
+                            window.location.href = '/chatgpt';
+                        }
+                    })
+                }, 2000);
+            })
+        }
+
+        fetchQrcode()
+
+        window.fetchQrcode = function () {
+            fetchQrcode()
+        }
+    })
+
+</script>
+
+</html>

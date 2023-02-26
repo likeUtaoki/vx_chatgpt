@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>人工智能聊天工具</title>
+  <link href="{{url_for('static',path='/js/layui/css/layui.css')}}" rel="stylesheet">
+  <style>
+    html {
+      background-color: #333;
+    }
+  </style>
+</head>
+
+<body>
+  <script src="{{url_for('static',path='/js/layui/layui.js')}}"></script>
+  <script>
+    if (!/^http(s*):\/\//.test(location.href)) {
+      alert('请部署到 localhost 上查看该演示');
+    }
+
+
+
+    //以下为 layim 最新版写法
+    layui.config({
+      layimPath: "{{url_for('static',path='/js/layim/')}}" //配置 layim.js 所在目录
+      , layimAssetsPath: "{{url_for('static',path='/js/layim/layim-assets/')}}" //layim 资源文件所在目录
+    }).extend({
+      layim: layui.cache.layimPath + 'layim' //配置 layim 组件所在的路径
+    }).use(['layim', 'layer'], function (layim) { //加载组件
+      var $ = layui.$;
+      var layer = layui.layer;
+      var token = sessionStorage.getItem("token")
+      $.ajax({
+        type: "POST",
+        url: "/verify_token",
+        headers: {
+          "Content-Type": 'application/json',
+          'access-token': token
+        }
+      }).then(res => {
+
+        if (res.code != 200) {
+          window.location.href = '/login';
+        } else {
+           websocket_connet()
+        }
+
+      })
+
+
+      function websocket_connet() {
+        //建立WebSocket通讯
+        //注意：如果你要兼容ie8+，建议你采用 socket.io 的版本。下面是以原生WS为例
+        //var socket = io.connect('http://127.0.0.1')
+        var ws = new WebSocket("ws://127.0.0.1/ws/"+token);
+        layim.on('sendMessage', function (res) {
+          var mine = res.mine
+          ws.send(mine.content)
+          ws.onmessage = function (event) {
+            console.log(event)
+            //如果是来自于用户的聊天消息，它必须接受以下字段
+            layim.getMessage({
+              username: "OpenAi机器人" //消息来源用户名
+              , avatar: "https://didiplus.oss-cn-hangzhou.aliyuncs.com/d5f1ae5b-d3ee-44fa-8b74-f8e775008a40.jpg" //消息来源用户头像
+              , id: "2" //消息的来源ID（如果是私聊，则是用户id，如果是群聊，则是群组id）
+              , type: "friend" //聊天窗口来源类型，从发送消息传递的to里面获取
+              , content: event.data //消息内容
+              , cid: 0 //消息id，可不传。除非你要对消息进行一些操作（如撤回）
+              , mine: false //是否我发送的消息，如果为true，则会显示在右方
+              , fromid: "2" //消息的发送者id（比如群组中的某个消息发送者），可用于自动解决浏览器多窗口时的一些问题
+              , timestamp: Date.parse(new Date()) //服务端时间戳毫秒数。注意：如果你返回的是标准的 unix 时间戳，记得要 *1000
+            });
+          }
+        })
+        //先来个客服模式压压精
+        layim.config({
+          brief: true //是否简约模式（如果true则不显示主面板）
+        }).chat({
+          name: 'OpenAi机器人'
+          , type: 'friend'
+          , avatar: 'https://didiplus.oss-cn-hangzhou.aliyuncs.com/d5f1ae5b-d3ee-44fa-8b74-f8e775008a40.jpg'
+          , id: 2
+        });
+      }
+
+
+    });
+  </script>
+</body>
+
+</html>
