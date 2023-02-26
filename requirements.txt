@@ -10,3 +10,5 @@ revChatGPT==2.3.11
 starlette==0.25.0
 uvicorn==0.20.0
 wechatpy==1.8.18
+crypto == 1.4.1
+cryptography==39.0.1
