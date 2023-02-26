@@ -27,7 +27,7 @@ app.mount("/static",StaticFiles(directory="static"),name="static")
 
 async def create_app():
     """ 注册中心 """
-    register_cors(app)  #注册跨域请求
+    #register_cors(app)  #注册跨域请求
     logger_init()  # 日志初始化
     register_router(app)
     await register_redis(app) #注册redis

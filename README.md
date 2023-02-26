@@ -4,15 +4,17 @@
 
 基于ChatGPT开发微信公众号智能机器人，同时也支持网页版的。全程免费试用，不限额度。网页版的通过关注微信公众号实现登录之后，即可开启于人工智能机器人畅快的聊天了
 
+
+
 ## 技术栈
 
-- `FastAPI`
+- [FastAPI](https://fastapi.tiangolo.com/zh/)
 
-- `redis`
+- [redis](https://aioredis.readthedocs.io/en/latest/)
 
-- ·layim·
+- [layim](http://layui.org.cn/fly/docs/7.html)
 
-- `wechatpy`
+- [wechatpy](http://docs.wechatpy.org/zh_CN/stable/)
 
 ## 安装过程
 
