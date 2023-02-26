@@ -18,7 +18,7 @@ from wechatpy.exceptions import InvalidSignatureException
 from wechatpy import parse_message
 from wechatpy.events import ScanEvent,SubscribeScanEvent
 from wechatpy.replies import TextReply
-router = APIRouter(prefix="/wxmp",tags=["微信公众号接口"])
+router = APIRouter(prefix="/wxmp",tags=["测试微信公众号接口"])
 
 
 @router.get("/signature",description="验证服务器")
