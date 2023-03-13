@@ -20,5 +20,5 @@ def register_cors(app:FastAPI):
         allow_origins=["*"],  # 允许访问的源
         allow_credentials=True,  # 支持 cookie
         allow_methods=("*"),  # 允许使用的请求方法
-        allow_headers=("*", "authentication"),  # 允许携带的 Headers        
+        allow_headers=("*"),  # 允许携带的 Headers        
     )

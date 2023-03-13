@@ -7,14 +7,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>人工智能聊天工具</title>
   <link href="{{url_for('static',path='/js/layui/css/layui.css')}}" rel="stylesheet">
+  <link href="{{url_for('static',path='/css/style.css')}}" rel="stylesheet">
   <style>
     html {
-      background-color: #333;
+      background-color: rgb(228, 218, 232);
     }
   </style>
 </head>
 
 <body>
+  <!-- <div class="card">
+    <div class="imgBx">
+      <img src="img.png">
+    </div>
+    <div class="content">
+      <div class="details">
+        <h2>Alina Smith<br><span>Senior UX/UI Designer</span></h2>
+        <div class="data">
+          <h3>342<br><span>Posts</span></h3>
+          <h3>120k<br><span>Followers</span></h3>
+          <h3>285<br><span>Following</span></h3>
+        </div>
+        <div class="actionBtn">
+          <button>Follow</button>
+          <button>Message</button>
+        </div>
+      </div>
+    </div>
+  </div>   -->
+  <pre class="layui-code">
+    //代码区域
+    var a = 'hello layui';
+  </pre>      
   <script src="{{url_for('static',path='/js/layui/layui.js')}}"></script>
   <script>
     if (!/^http(s*):\/\//.test(location.href)) {
@@ -29,39 +53,22 @@
       , layimAssetsPath: "{{url_for('static',path='/js/layim/layim-assets/')}}" //layim 资源文件所在目录
     }).extend({
       layim: layui.cache.layimPath + 'layim' //配置 layim 组件所在的路径
-    }).use(['layim', 'layer'], function (layim) { //加载组件
+    }).use(['layim', 'layer','code'], function (layim) { //加载组件
       var $ = layui.$;
+      layui.code(); //引用code方法
       var layer = layui.layer;
-      var token = sessionStorage.getItem("token")
-      $.ajax({
-        type: "POST",
-        url: "/verify_token",
-        headers: {
-          "Content-Type": 'application/json',
-          'access-token': token
-        }
-      }).then(res => {
-
-        if (res.code != 200) {
-          window.location.href = '/login';
-        } else {
-           websocket_connet()
-        }
-
-      })
-
+      websocket_connet()
 
       function websocket_connet() {
         //建立WebSocket通讯
         //注意：如果你要兼容ie8+，建议你采用 socket.io 的版本。下面是以原生WS为例
-        //var socket = io.connect('http://127.0.0.1')
-        var ws = new WebSocket("ws://127.0.0.1/ws/"+token);
+        var ws = new WebSocket("ws://127.0.0.1/chat");
         layim.on('sendMessage', function (res) {
           var mine = res.mine
           ws.send(mine.content)
           ws.onmessage = function (event) {
-            console.log(event)
             //如果是来自于用户的聊天消息，它必须接受以下字段
+            console.log(event)
             layim.getMessage({
               username: "OpenAi机器人" //消息来源用户名
               , avatar: "https://didiplus.oss-cn-hangzhou.aliyuncs.com/d5f1ae5b-d3ee-44fa-8b74-f8e775008a40.jpg" //消息来源用户头像

@@ -7,7 +7,7 @@ LastEditTime: 2023-02-25 18:19:58
 '''
 from fastapi import APIRouter,Query,Request
 from core import RedisTools
-from utils import WXAPI,create_access_token,generate_response
+from utils import WXAPI,create_access_token,chatgpt_turbo
 from core import result_success,ResultData,RedisTools
 from starlette.responses import HTMLResponse
 from loguru import logger
@@ -59,7 +59,7 @@ async def signature_post(request:Request):
                 reply = TextReply()
                 reply.source = rec_msg.target
                 reply.target = rec_msg.source
-                reply.content = generate_response(rec_msg.content)
+                reply.content = chatgpt_turbo(rec_msg.content)
                 return reply.render()
             case "event":
                 reply = TextReply()

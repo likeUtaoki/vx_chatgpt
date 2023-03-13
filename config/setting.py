@@ -55,6 +55,9 @@ class Settings(BaseSettings):
     #ChatGPT
     OPENAIKEY:str =os.environ.get("OPENAIKEY")
     SESSION_TOKEN =os.environ.get("SESSION_TOKEN")
+    CHARACTER_DESC:str = "你是ChatGPT, 一个由OpenAI训练的大型语言模型, 你旨在回答并解决人们的任何问题，并且可以使用多种语言与人交流。"
+    CONVERSATION_MAX_TOKENS:int =1000
+    PROXY:str =""
     class Config:
         case_sensitive = True  # 区分大小写
 

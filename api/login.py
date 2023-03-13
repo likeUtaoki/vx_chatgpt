@@ -16,7 +16,7 @@ templates = Jinja2Templates(directory="templates")
 
 @router.get("/login",summary="登录页面渲染")
 def login(request:Request):
-    return templates.TemplateResponse("login.html",{
+    return templates.TemplateResponse("login_v1.html",{
         'request':request
     })
 
@@ -29,6 +29,13 @@ def chat(request:Request):
         'request':request
     })
 
+
+
+@router.get("/",summary="渲染聊天机器人页面")
+def chat(request:Request):
+    return templates.TemplateResponse("chat.html",{
+        'request':request
+    })
 
 
 @router.post("/verify_token",response_model=ResultData)
