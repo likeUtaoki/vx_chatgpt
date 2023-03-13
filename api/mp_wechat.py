@@ -6,12 +6,12 @@ from wechatpy.exceptions import InvalidSignatureException
 from wechatpy import parse_message
 from wechatpy.events import ScanEvent,SubscribeScanEvent
 from wechatpy.replies import TextReply
-from utils import chatbot
+from utils import chatbot,ChatGPTModel
 import hashlib
 from loguru import logger
 from starlette.responses import HTMLResponse
 from concurrent.futures import ThreadPoolExecutor
-from models.chatgpt.chatgpt_model import ChatGPTModel
+
 
 thread_pool = ThreadPoolExecutor(max_workers=8)
 cache = {}

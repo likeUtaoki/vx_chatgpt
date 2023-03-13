@@ -1,10 +1,20 @@
-from models.model import Model
 from config import settings
 import openai 
 from loguru import logger
 import time
 
+
+
 user_session = dict()
+
+class Model(object):
+    def reply(self,query,context =None):
+        """
+        model auto-reply content
+        :param req: received message
+        :return: reply content
+        """
+        raise NotImplementedError
 
 # OpenAI对话模型API (可用)
 class ChatGPTModel(Model):

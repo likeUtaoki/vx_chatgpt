@@ -9,3 +9,4 @@ from .wechatapi import *
 from .ChatGPT import *
 from .WebSocketManager import *
 from .JwtToken import *
+from .chatgpt_model import ChatGPTModel

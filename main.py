@@ -11,7 +11,7 @@ from register import *
 from loguru import logger
 from starlette.staticfiles import StaticFiles
 from config import settings
-
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
     description=settings.DESCRIPTION,
@@ -20,13 +20,20 @@ app = FastAPI(
     title=settings.TITLE,
 )
 
+app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],  # 允许访问的源
+        allow_credentials=True,  # 支持 cookie
+        allow_methods=("*"),  # 允许使用的请求方法
+        allow_headers=("*"),  # 允许携带的 Headers        
+)
 
 
 app.mount("/static",StaticFiles(directory="static"),name="static")
 
 async def create_app():
     """ 注册中心 """
-    register_cors(app)  #注册跨域请求
+
     logger_init()  # 日志初始化
     register_router(app)
     await register_redis(app) #注册redis
